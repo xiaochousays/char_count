@@ -4,21 +4,21 @@
 #include <ctype.h>
 
 // check if this char is printable
-bool isNotPrint() {
-    return !isPrint();
+int isNotPrint(int ch) {
+    return !isprint(ch);
 }
 
 // jump table
 static int (*testFunc[])(int) = {
-    isCtrl;
-    isSpace;
-    isDigit;
-    isLower;
-    isUpper;
-    isPunct;
-    isNotPrint;
+    iscntrl,
+    isspace,
+    isdigit,
+    islower,
+    isupper,
+    ispunct,
+    isNotPrint
 };
-#define N_CATEGORIES (sizeof(test_func) / sizeof(test_func)[0])
+#define N_CATEGORIES (sizeof(testFunc) / sizeof(testFunc)[0])
 
 // names of characters
 char *lable[] = {
@@ -38,12 +38,13 @@ int total;
 main() {
     int ch;
     int category;
-
-    while(ch = getchar() != EOF) {
+    int N_CATE = N_CATEGORIES;
+    printf("N_CATEGORIES is %d\n", N_CATE);
+    while((ch = getchar()) != EOF) {
         ++total;
 
         for(category = 0; category < N_CATEGORIES; ++category) {
-            if(test_func[category](ch))
+            if(testFunc[category](ch))
                 ++count[category];
         }
     }
@@ -54,16 +55,9 @@ main() {
         return EXIT_SUCCESS;
     }
     for(category = 0; category < N_CATEGORIES; ++category) {
-        printf("%3.0f%% %s chars\n", count[category] * 100.0 / total)
+        printf("%3.0f%% %s chars\n",
+            count[category] * 100.0 / total,
+            lable[category]);
     }
+    return EXIT_SUCCESS;
 }
-
-
-
-
-
-
-
-
-
-
